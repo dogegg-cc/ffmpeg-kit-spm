@@ -63,7 +63,7 @@ class VideoProcessor {
         
         // 2. 异步执行一条简单的 FFmpeg 命令（例如获取视频信息）
         let videoPath = "input.mp4"
-        FFmpegKit.execute(async: "-i \(videoPath)") { session in
+        FFmpegKit.executeAsync("-i \(videoPath)") { session in
             guard let session = session else { return }
             
             let returnCode = session.getReturnCode()
