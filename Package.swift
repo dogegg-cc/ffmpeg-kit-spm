@@ -22,6 +22,14 @@ let package = Package(
                 "libswscale"
             ]
         ),
+        // 独立导出各个底层二进制子模块，以支持 Swift Explicit Module 解析
+        .library(name: "libavcodec", targets: ["libavcodec"]),
+        .library(name: "libavdevice", targets: ["libavdevice"]),
+        .library(name: "libavfilter", targets: ["libavfilter"]),
+        .library(name: "libavformat", targets: ["libavformat"]),
+        .library(name: "libavutil", targets: ["libavutil"]),
+        .library(name: "libswresample", targets: ["libswresample"]),
+        .library(name: "libswscale", targets: ["libswscale"])
     ],
     dependencies: [],
     targets: [
