@@ -1,6 +1,6 @@
 # FFmpegKit Swift Package Manager (iOS)
 
-这是一个专为 iOS 平台设计的、自包含的 **Swift Package Manager (SPM)** 项目，用于集成与维护预编译的 `ffmpeg-kit` 及其依赖的 7 个底层 FFmpeg C 核心二进制 `xcframework`。
+这是一个专为 iOS 平台设计的、自包含的 **Swift Package Manager (SPM)** 项目，用于集成与维护预编译的 [ffmpeg-kit](https://github.com/arthenica/ffmpeg-kit) 及其依赖的 7 个底层 FFmpeg C 核心二进制 `xcframework`。
 
 ---
 
