@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "components": [
+    {
+      "name": "LAME",
+      "license": "LGPL-2.0-or-later",
+      "licenseFile": "LICENSE.LAME",
+      "source": "https://lame.sourceforge.io/"
+    },
+    {
+      "name": "libogg",
+      "license": "BSD-3-Clause",
+      "licenseFile": "LICENSE.LIBOGG",
+      "source": "https://xiph.org/ogg/"
+    },
+    {
+      "name": "Vorbis",
+      "license": "BSD-3-Clause",
+      "licenseFile": "LICENSE.LIBVORBIS",
+      "source": "https://xiph.org/vorbis/"
+    },
+    {
+      "name": "Opus",
+      "license": "BSD-3-Clause",
+      "licenseFile": "LICENSE.OPUS",
+      "source": "https://opus-codec.org/"
+    },
+    {
+      "name": "SoX Resampler",
+      "license": "LGPL-2.1-or-later",
+      "licenseFile": "LICENSE.SOXR",
+      "source": "https://sourceforge.net/projects/soxr/"
+    }
+  ]
+}

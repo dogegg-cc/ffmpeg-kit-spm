@@ -93,10 +93,17 @@ FFmpegKit.executeAsync("-i input.mp4 -vn -c:a copy output.m4a") { session in
 ## 许可证
 
 FFmpegKitNext 与本次 FFmpeg 构建按 LGPL 3.0 分发，详见根目录 `LICENSE`。
-第三方许可证随 `libavcodec.xcframework` 内的 `LICENSE.*` 文件一并分发：
+第三方许可证同时位于仓库根目录的 `Licenses/` 和 `libavcodec.xcframework` 内。根目录副本供
+LicensePlist 等不会递归扫描 binary target 内容的工具读取，`Licenses/manifest.json` 提供组件名称、
+SPDX 标识、来源地址和许可证文件的机器可读映射：
 
 - LAME：GNU Library General Public License 2.0
 - soxr：GNU Lesser General Public License 2.1
 - libogg、libvorbis、Opus：BSD 风格许可证
 
 本构建未启用 `--enable-gpl` 或 non-free 组件。分发二进制时仍需履行 LGPL 和各第三方许可证义务。
+
+`sync-frameworks.sh` 会把许可证视为二进制发布集合的一部分：缺少已登记许可证或发现未登记的
+`LICENSE.*` 文件时直接失败，防止更新外部库后静默漏发许可证。消费方仍需在 LicensePlist 中将
+`Licenses/manifest.json` 中的组件作为 `manual` 条目登记，因为 LicensePlist 只会自动读取 Swift
+Package 的顶层 `LICENSE`，不会把静态链接进 XCFramework 的库识别为传递依赖。
