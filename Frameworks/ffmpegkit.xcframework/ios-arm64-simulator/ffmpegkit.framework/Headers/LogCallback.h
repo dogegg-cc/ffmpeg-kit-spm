@@ -1,33 +1,33 @@
 /*
- * Copyright (c) 2018-2021 Taner Sener
+ * Copyright (c) 2018-2021, 2026 Taner Sener
  *
- * This file is part of FFmpegKit.
+ * This file is part of FFmpegKitNext.
  *
- * FFmpegKit is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * FFmpegKitNext is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * FFmpegKit is distributed in the hope that it will be useful,
+ * FFmpegKitNext is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU Lesser General License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General License
+ * along with FFmpegKitNext. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef FFMPEG_KIT_LOG_CALLBACK_H
 #define FFMPEG_KIT_LOG_CALLBACK_H
 
-#import <Foundation/Foundation.h>
 #import "Log.h"
+#import <Foundation/Foundation.h>
 
 /**
  * <p>Callback that receives logs generated for <code>FFmpegKit</code> sessions.
  *
  * @param log log entry
  */
-typedef void (^LogCallback)(Log* log);
+typedef void (^LogCallback)(Log *log);
 
 #endif // FFMPEG_KIT_LOG_CALLBACK_H

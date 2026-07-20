@@ -1,20 +1,20 @@
 /*
- * Copyright (c) 2018-2022 Taner Sener
+ * Copyright (c) 2018-2022, 2026 Taner Sener
  *
- * This file is part of FFmpegKit.
+ * This file is part of FFmpegKitNext.
  *
- * FFmpegKit is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * FFmpegKitNext is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * FFmpegKit is distributed in the hope that it will be useful,
+ * FFmpegKitNext is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU Lesser General License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with FFmpegKit.  If not, see <http://www.gnu.org/licenses/>.
+ * You should have received a copy of the GNU Lesser General License
+ * along with FFmpegKitNext. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef FFMPEG_KIT_STREAM_INFORMATION_H
@@ -22,185 +22,186 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString* const StreamKeyIndex;
-extern NSString* const StreamKeyType;
-extern NSString* const StreamKeyCodec;
-extern NSString* const StreamKeyCodecLong;
-extern NSString* const StreamKeyFormat;
-extern NSString* const StreamKeyWidth;
-extern NSString* const StreamKeyHeight;
-extern NSString* const StreamKeyBitRate;
-extern NSString* const StreamKeySampleRate;
-extern NSString* const StreamKeySampleFormat;
-extern NSString* const StreamKeyChannelLayout;
-extern NSString* const StreamKeySampleAspectRatio;
-extern NSString* const StreamKeyDisplayAspectRatio;
-extern NSString* const StreamKeyAverageFrameRate;
-extern NSString* const StreamKeyRealFrameRate;
-extern NSString* const StreamKeyTimeBase;
-extern NSString* const StreamKeyCodecTimeBase;
-extern NSString* const StreamKeyTags;
+extern NSString *const StreamKeyIndex;
+extern NSString *const StreamKeyType;
+extern NSString *const StreamKeyCodec;
+extern NSString *const StreamKeyCodecLong;
+extern NSString *const StreamKeyFormat;
+extern NSString *const StreamKeyWidth;
+extern NSString *const StreamKeyHeight;
+extern NSString *const StreamKeyBitRate;
+extern NSString *const StreamKeySampleRate;
+extern NSString *const StreamKeySampleFormat;
+extern NSString *const StreamKeyChannelLayout;
+extern NSString *const StreamKeySampleAspectRatio;
+extern NSString *const StreamKeyDisplayAspectRatio;
+extern NSString *const StreamKeyAverageFrameRate;
+extern NSString *const StreamKeyRealFrameRate;
+extern NSString *const StreamKeyTimeBase;
+extern NSString *const StreamKeyCodecTimeBase;
+extern NSString *const StreamKeyTags;
 
 /**
  * Stream information class.
  */
 @interface StreamInformation : NSObject
 
-- (instancetype)init:(NSDictionary*)streamDictionary;
+- (instancetype)init:(NSDictionary *)streamDictionary;
 
 /**
  * Returns stream index.
  *
  * @return stream index, starting from zero
  */
-- (NSNumber*)getIndex;
+- (NSNumber *)getIndex;
 
 /**
  * Returns stream type.
  *
  * @return stream type; audio or video
  */
-- (NSString*)getType;
+- (NSString *)getType;
 
 /**
  * Returns stream codec.
  *
  * @return stream codec
  */
-- (NSString*)getCodec;
+- (NSString *)getCodec;
 
 /**
  * Returns stream codec in long format.
  *
  * @return stream codec with additional profile and mode information
  */
-- (NSString*)getCodecLong;
+- (NSString *)getCodecLong;
 
 /**
  * Returns stream format.
  *
  * @return stream format
  */
-- (NSString*)getFormat;
+- (NSString *)getFormat;
 
 /**
  * Returns width.
  *
  * @return width in pixels
  */
-- (NSNumber*)getWidth;
+- (NSNumber *)getWidth;
 
 /**
  * Returns height.
  *
  * @return height in pixels
  */
-- (NSNumber*)getHeight;
+- (NSNumber *)getHeight;
 
 /**
  * Returns bitrate.
  *
  * @return bitrate in kb/s
  */
-- (NSString*)getBitrate;
+- (NSString *)getBitrate;
 
 /**
  * Returns sample rate.
  *
  * @return sample rate in hz
  */
-- (NSString*)getSampleRate;
+- (NSString *)getSampleRate;
 
 /**
  * Returns sample format.
  *
  * @return sample format
  */
-- (NSString*)getSampleFormat;
+- (NSString *)getSampleFormat;
 
 /**
  * Returns channel layout.
  *
  * @return channel layout
  */
-- (NSString*)getChannelLayout;
+- (NSString *)getChannelLayout;
 
 /**
  * Returns sample aspect ratio.
  *
  * @return sample aspect ratio
  */
-- (NSString*)getSampleAspectRatio;
+- (NSString *)getSampleAspectRatio;
 
 /**
  * Returns display aspect ratio.
  *
  * @return display aspect ratio
  */
-- (NSString*)getDisplayAspectRatio;
+- (NSString *)getDisplayAspectRatio;
 
 /**
  * Returns average frame rate.
  *
  * @return average frame rate in fps
  */
-- (NSString*)getAverageFrameRate;
+- (NSString *)getAverageFrameRate;
 
 /**
  * Returns real frame rate.
  *
  * @return real frame rate in tbr
  */
-- (NSString*)getRealFrameRate;
+- (NSString *)getRealFrameRate;
 
 /**
  * Returns time base.
  *
  * @return time base in tbn
  */
-- (NSString*)getTimeBase;
+- (NSString *)getTimeBase;
 
 /**
  * Returns codec time base.
  *
  * @return codec time base in tbc
  */
-- (NSString*)getCodecTimeBase;
+- (NSString *)getCodecTimeBase;
 
 /**
  * Returns all tags.
  *
  * @return tags dictionary
  */
-- (NSDictionary*)getTags;
+- (NSDictionary *)getTags;
 
 /**
  * Returns the stream property associated with the key.
  *
  * @return stream property as string or nil if the key is not found
  */
-- (NSString*)getStringProperty:(NSString*)key;
+- (NSString *)getStringProperty:(NSString *)key;
 
 /**
  * Returns the stream property associated with the key.
  *
  * @return stream property as number or nil if the key is not found
  */
-- (NSNumber*)getNumberProperty:(NSString*)key;
+- (NSNumber *)getNumberProperty:(NSString *)key;
 
 /**
  * Returns the stream property associated with the key.
  *
  * @return stream property as id or nil if the key is not found
-*/
-- (id)getProperty:(NSString*)key;
+ */
+- (id)getProperty:(NSString *)key;
 
 /**
  * Returns all stream properties defined.
  *
- * @return all stream properties in a dictionary or nil if no properties are defined
-*/
-- (NSDictionary*)getAllProperties;
+ * @return all stream properties in a dictionary or nil if no properties are
+ * defined
+ */
+- (NSDictionary *)getAllProperties;
 
 @end
 

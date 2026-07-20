@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "FFmpegKit",
     platforms: [
-        .iOS(.v15)
+        .iOS(.v17)
     ],
     products: [
         // 导出一个主 library，直接包含 8 个预编译核心二进制库
@@ -33,7 +33,7 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        // 8 个底层的二进制 xcframework target (指向本地的 Frameworks 文件夹)
+        // 8 个二进制 XCFramework target（仅包含 iOS arm64 真机与 arm64 模拟器）
         .binaryTarget(
             name: "ffmpegkit",
             path: "Frameworks/ffmpegkit.xcframework"

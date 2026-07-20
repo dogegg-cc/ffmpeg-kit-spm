@@ -3,7 +3,7 @@
 # ==============================================================================
 # FFmpegKit SPM Frameworks Sync Script
 # ==============================================================================
-# This script copies the prebuilt iOS xcframeworks from ffmpeg-kit prebuilt 
+# This script copies the prebuilt iOS xcframeworks from FFmpegKitNext prebuilt
 # output directory to ffmpeg-kit-spm Frameworks directory.
 # ==============================================================================
 
@@ -12,7 +12,7 @@ set -e
 # 获取脚本所在目录的绝对路径
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SPM_DIR="${SCRIPT_DIR}"
-SOURCE_DIR="${SPM_DIR}/../ffmpeg-kit/prebuilt/bundle-apple-xcframework-ios"
+SOURCE_DIR="${SPM_DIR}/../ffmpeg-kit-next/prebuilt/bundle-apple-xcframework-ios-17.0"
 TARGET_DIR="${SPM_DIR}/Frameworks"
 
 echo "=================================================="
@@ -28,8 +28,7 @@ if [ ! -d "${SOURCE_DIR}" ]; then
     exit 1
 fi
 
-# 创建目标目录
-mkdir -p "${TARGET_DIR}"
+# 产物是一个原子集合。先确认 8 个包全部存在，再清空旧目录。
 
 # 声明需要同步的 xcframework 列表
 XCFRAMEWORKS=(
@@ -43,21 +42,24 @@ XCFRAMEWORKS=(
     "libswscale.xcframework"
 )
 
-# 循环同步每一个 xcframework
+# 在删除旧产物前验证完整性
 for xcframework in "${XCFRAMEWORKS[@]}"; do
     SRC_PATH="${SOURCE_DIR}/${xcframework}"
-    DST_PATH="${TARGET_DIR}/${xcframework}"
-    
-    if [ -d "${SRC_PATH}" ]; then
-        echo "🔄 同步: ${xcframework} ..."
-        # 清理原有的目标包
-        rm -rf "${DST_PATH}"
-        # 复制新包
-        cp -R "${SRC_PATH}" "${DST_PATH}"
-        echo "✅ 完成: ${xcframework}"
-    else
-        echo "⚠️ 警告: 找不到源包 ${SRC_PATH}，跳过。"
+    if [ ! -d "${SRC_PATH}" ]; then
+        echo "❌ 错误: 找不到源包 ${SRC_PATH}"
+        echo "💡 为避免生成不完整的动态依赖闭包，本次未修改 Frameworks。"
+        exit 1
     fi
+done
+
+rm -rf "${TARGET_DIR}"
+mkdir -p "${TARGET_DIR}"
+
+# 同步完整的动态框架依赖闭包
+for xcframework in "${XCFRAMEWORKS[@]}"; do
+    echo "🔄 同步: ${xcframework} ..."
+    cp -R "${SOURCE_DIR}/${xcframework}" "${TARGET_DIR}/${xcframework}"
+    echo "✅ 完成: ${xcframework}"
 done
 
 echo "=================================================="
