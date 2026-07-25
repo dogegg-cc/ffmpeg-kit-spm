@@ -61,6 +61,39 @@ for xcframework in "${XCFRAMEWORKS[@]}"; do
         echo "💡 为避免生成不完整的动态依赖闭包，本次未修改 Frameworks。"
         exit 1
     fi
+
+    FRAMEWORK_NAME="${xcframework%.xcframework}"
+    FRAMEWORK_COUNT=0
+    while IFS= read -r FRAMEWORK_PATH; do
+        FRAMEWORK_COUNT=$((FRAMEWORK_COUNT + 1))
+        FRAMEWORK_BINARY="${FRAMEWORK_PATH}/${FRAMEWORK_NAME}"
+        SLICE_DIRECTORY="$(dirname "${FRAMEWORK_PATH}")"
+        DSYM_PATH="${SLICE_DIRECTORY}/dSYMs/${FRAMEWORK_NAME}.framework.dSYM"
+
+        if [ ! -f "${FRAMEWORK_BINARY}" ] || [ ! -d "${DSYM_PATH}" ]; then
+            echo "❌ 错误: ${xcframework} 的切片缺少二进制或 dSYM: ${SLICE_DIRECTORY}"
+            echo "💡 请使用 --enable-dsym 重新构建 XCFramework。"
+            exit 1
+        fi
+
+        BINARY_UUIDS="$(dwarfdump --uuid "${FRAMEWORK_BINARY}" | awk '{print $2}' | sort)"
+        DSYM_UUIDS="$(dwarfdump --uuid "${DSYM_PATH}" | awk '{print $2}' | sort)"
+        if [ -z "${BINARY_UUIDS}" ] || [ "${BINARY_UUIDS}" != "${DSYM_UUIDS}" ]; then
+            echo "❌ 错误: ${xcframework} 的二进制与 dSYM UUID 不匹配: ${SLICE_DIRECTORY}"
+            exit 1
+        fi
+
+        COMPILE_UNIT_COUNT="$(dwarfdump --debug-info "${DSYM_PATH}" | awk '/DW_TAG_compile_unit/ { count++ } END { print count + 0 }')"
+        if [ "${COMPILE_UNIT_COUNT}" -eq 0 ]; then
+            echo "❌ 错误: ${xcframework} 的 dSYM 不包含有效 DWARF 编译单元: ${SLICE_DIRECTORY}"
+            exit 1
+        fi
+    done < <(find "${SRC_PATH}" -type d -name "${FRAMEWORK_NAME}.framework" -print)
+
+    if [ "${FRAMEWORK_COUNT}" -eq 0 ]; then
+        echo "❌ 错误: ${xcframework} 中没有 framework 切片"
+        exit 1
+    fi
 done
 
 LICENSE_SOURCE_DIR="${SOURCE_DIR}/libavcodec.xcframework/ios-arm64/libavcodec.framework"

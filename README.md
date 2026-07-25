@@ -69,6 +69,7 @@ FFmpegKit.executeAsync("-i input.mp4 -vn -c:a copy output.m4a") { session in
   -p xcode26 \
   -x \
   --spm \
+  --enable-dsym \
   --target=17.0 \
   --no-bitcode \
   --disable-arm64e \
