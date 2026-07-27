@@ -60,6 +60,25 @@ FFmpegKit.executeAsync("-i input.mp4 -vn -c:a copy output.m4a") { session in
 }
 ```
 
+## Direct libav* API
+
+需要自行管理解封装、解码和音视频同步时，只给 App target 添加 `CFFmpeg` 产品，然后导入：
+
+```swift
+import CFFmpeg
+
+let codecVersion = avcodec_version()
+let formatVersion = avformat_version()
+```
+
+`CFFmpeg` 适合自定义音频或视频播放器，以及需要直接处理 Packet、Frame、PTS、精确 Seek 和
+Decoder Flush 的场景。它只是 FFmpeg 官方 public C API 的 Swift 导入入口，不包含播放器封装，
+也不与 FFmpegKit 命令执行层绑定。命令式转码和导出仍应使用 `FFmpegKit` 产品。
+
+调用方必须遵循 FFmpeg 的资源所有权规则：`CFFmpeg` 不管理线程安全或 Context 生命周期，也不会
+自动释放 Packet、Frame、Context 等资源。FFmpeg C API 可能随大版本变化，建议消费方固定 Package
+revision。
+
 ## 更新二进制
 
 先在相邻的 `ffmpeg-kit-next` 仓库生成 iOS 17 XCFramework：
@@ -90,6 +109,8 @@ FFmpegKit.executeAsync("-i input.mp4 -vn -c:a copy output.m4a") { session in
 ```
 
 脚本要求 8 个 XCFramework 全部存在，才会替换 `Frameworks/`，避免发布不完整的动态依赖闭包。
+脚本还会验证 `CFFmpeg` 依赖的公开头文件在每个 slice 中都存在；更新后应重新执行 Swift 6 iOS
+Smoke Test。同步过程只替换 `Frameworks/`，不会删除 `Sources/CFFmpeg`。
 
 ## 许可证
 

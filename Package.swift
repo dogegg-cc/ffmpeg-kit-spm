@@ -22,6 +22,8 @@ let package = Package(
                 "libswscale"
             ]
         ),
+        // 为 Swift 提供 FFmpeg 官方 public C API 的稳定 Clang 模块入口
+        .library(name: "CFFmpeg", targets: ["CFFmpeg"]),
         // 独立导出各个底层二进制子模块，以支持 Swift Explicit Module 解析
         .library(name: "libavcodec", targets: ["libavcodec"]),
         .library(name: "libavdevice", targets: ["libavdevice"]),
@@ -33,6 +35,17 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
+        .target(
+            name: "CFFmpeg",
+            dependencies: [
+                "libavformat",
+                "libavcodec",
+                "libavutil",
+                "libswresample"
+            ],
+            path: "Sources/CFFmpeg",
+            publicHeadersPath: "include"
+        ),
         // 8 个二进制 XCFramework target（仅包含 iOS arm64 真机与 arm64 模拟器）
         .binaryTarget(
             name: "ffmpegkit",
@@ -65,6 +78,17 @@ let package = Package(
         .binaryTarget(
             name: "libswscale",
             path: "Frameworks/libswscale.xcframework"
+        ),
+        .testTarget(
+            name: "CFFmpegTests",
+            dependencies: [
+                "CFFmpeg",
+                "ffmpegkit"
+            ],
+            path: "Tests/CFFmpegTests",
+            resources: [
+                .process("Resources")
+            ]
         )
     ]
 )

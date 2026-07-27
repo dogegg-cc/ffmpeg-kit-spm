@@ -53,6 +53,28 @@ XCFRAMEWORKS=(
     "libswscale.xcframework"
 )
 
+# CFFmpeg 只公开下列 FFmpeg public headers。同步时先验证每个 slice 的
+# framework-style include 路径，避免上游头文件布局变化后生成无法导入的 Package。
+CFFMPEG_PUBLIC_HEADERS=(
+    "libavformat:avformat.h"
+    "libavformat:avio.h"
+    "libavcodec:avcodec.h"
+    "libavcodec:codec.h"
+    "libavcodec:codec_id.h"
+    "libavcodec:codec_par.h"
+    "libavcodec:packet.h"
+    "libavutil:avutil.h"
+    "libavutil:channel_layout.h"
+    "libavutil:error.h"
+    "libavutil:frame.h"
+    "libavutil:mathematics.h"
+    "libavutil:mem.h"
+    "libavutil:opt.h"
+    "libavutil:rational.h"
+    "libavutil:samplefmt.h"
+    "libswresample:swresample.h"
+)
+
 # 在删除旧产物前验证完整性
 for xcframework in "${XCFRAMEWORKS[@]}"; do
     SRC_PATH="${SOURCE_DIR}/${xcframework}"
@@ -94,6 +116,18 @@ for xcframework in "${XCFRAMEWORKS[@]}"; do
         echo "❌ 错误: ${xcframework} 中没有 framework 切片"
         exit 1
     fi
+done
+
+for header_spec in "${CFFMPEG_PUBLIC_HEADERS[@]}"; do
+    framework_name="${header_spec%%:*}"
+    header_name="${header_spec#*:}"
+    while IFS= read -r framework_path; do
+        if [ ! -f "${framework_path}/Headers/${header_name}" ]; then
+            echo "❌ 错误: CFFmpeg 依赖的公开头文件缺失: ${framework_path}/Headers/${header_name}"
+            echo "💡 本次未修改 Frameworks；请检查 FFmpeg public header 布局或更新 CFFmpeg.h。"
+            exit 1
+        fi
+    done < <(find "${SOURCE_DIR}/${framework_name}.xcframework" -type d -name "${framework_name}.framework" -print)
 done
 
 LICENSE_SOURCE_DIR="${SOURCE_DIR}/libavcodec.xcframework/ios-arm64/libavcodec.framework"
